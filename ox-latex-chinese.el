@@ -284,7 +284,7 @@ to latex."
 
 (defun oxlc/get-override-value (variable)
   "返回 `variable' 对应的 ox-latex-chinese 变量的取值。"
-  (push arg oxlc/overrided-variables)
+  (push variable oxlc/overrided-variables)
   (symbol-value (intern (concat "oxlc/" (symbol-name variable)))))
 
 (defun oxlc/org-export-as (orig-fun backend &optional subtreep
