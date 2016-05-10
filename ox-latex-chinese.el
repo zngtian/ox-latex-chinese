@@ -306,8 +306,8 @@ to latex."
 (defun oxlc/org-latex-compile (orig-fun texfile &optional snippet)
   (if oxlc/ox-latex-chinese-enable
       (let ((org-latex-pdf-process
-             (if snippet (car (cdr org-latex-commands))
-               (car org-latex-commands))))
+             (if snippet (car (cdr oxlc/org-latex-commands))
+               (car oxlc/org-latex-commands))))
         (funcall orig-fun texfile snippet))
     (funcall orig-fun texfile snippet)))
 ;; #+END_SRC
