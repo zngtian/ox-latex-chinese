@@ -99,6 +99,7 @@
 ;; *** 配置
 ;; #+BEGIN_EXAMPLE
 ;; (require 'ox-latex-chinese)
+;; (oxlc/toggle-ox-latex-chinese t)
 ;; #+END_EXAMPLE
 
 ;; ** 常见错误排查和解决
@@ -154,76 +155,86 @@
 
 
 ;;; Code:
-;; * 代码                                                          :code:README:
+;; * 代码                                                          :code:
 ;; #+BEGIN_SRC emacs-lisp
 ;; require
 (require 'org)
 (require 'ox)
 (require 'ox-latex)
-(require 'ox-latex-chinese)
 
-;; latex
-(setq org-latex-coding-system 'utf-8)
-;; 不要在latex输出文件中插入\maketitle
+(defgroup org-export-latex-chinese nil
+  "Options for exporting Org mode files to LaTeX."
+  :group 'org-export-latex)
 
-;; (setq org-latex-title-command "")
-(setq org-latex-date-format "%Y-%m-%d")
+(defcustom oxlc/org-latex-coding-system 'utf-8
+  "Please see the info of `org-latex-coding-system', when `oxlc/org-latex-chinese-enable'
+set to t, its value will override the value of `org-latex-coding-system' before exporting
+to latex."
+  :group 'org-export-latex-chinese)
 
-;; (setq org-export-with-LaTeX-fragments 'imagemagick)
-;; (setq org-latex-create-formula-image-program 'imagemagick)
+(defcustom oxlc/org-latex-commands
+  '(("xelatex -interaction nonstopmode -output-directory %o %f"
+     "bibtex %b"
+     "xelatex -interaction nonstopmode -output-directory %o %f"
+     "xelatex -interaction nonstopmode -output-directory %o %f")
+    ("xelatex -interaction nonstopmode -output-directory %o %f"))
+  "Please see the info of `org-latex-commands', when `oxlc/org-latex-chinese-enable'
+set to t, its value will override the value of `org-latex-commands' before exporting
+to latex."
+  :group 'org-export-latex-chinese)
 
-(setq org-latex-commands '(("xelatex -interaction nonstopmode -output-directory %o %f"
-                            "bibtex %b"
-                            "xelatex -interaction nonstopmode -output-directory %o %f"
-                            "xelatex -interaction nonstopmode -output-directory %o %f")
-                           ("xelatex -interaction nonstopmode -output-directory %o %f")))
+(defcustom oxlc/org-latex-default-class "ctexart"
+  "Please see the info of `org-latex-default-class', when `oxlc/org-latex-chinese-enable'
+set to t, its value will override the value of `org-latex-default-class' before exporting
+to latex."
+  :group 'org-export-latex-chinese)
 
-(setq org-latex-default-class "ctexart")
-
-(add-to-list 'org-latex-classes
-             '("ctexart"
-               "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexart}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-(add-to-list 'org-latex-classes
-             '("ctexrep"
-               "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexrep}"
-               ("\\part{%s}" . "\\part*{%s}")
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
-
-(add-to-list 'org-latex-classes
-             '("ctexbook"
-               "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexbook}"
-               ("\\part{%s}" . "\\part*{%s}")
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
-
-(add-to-list 'org-latex-classes
-             '("beamer"
-               "\\documentclass{beamer}
+(defcustom oxlc/org-latex-classes
+  '(("ctexart"
+     "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexart}"
+     ("\\section{%s}" . "\\section*{%s}")
+     ("\\subsection{%s}" . "\\subsection*{%s}")
+     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+     ("\\paragraph{%s}" . "\\paragraph*{%s}")
+     ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+    ("ctexrep"
+     "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexrep}"
+     ("\\part{%s}" . "\\part*{%s}")
+     ("\\chapter{%s}" . "\\chapter*{%s}")
+     ("\\section{%s}" . "\\section*{%s}")
+     ("\\subsection{%s}" . "\\subsection*{%s}")
+     ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+    ("ctexbook"
+     "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexbook}"
+     ("\\part{%s}" . "\\part*{%s}")
+     ("\\chapter{%s}" . "\\chapter*{%s}")
+     ("\\section{%s}" . "\\section*{%s}")
+     ("\\subsection{%s}" . "\\subsection*{%s}")
+     ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+    ("beamer"
+     "\\documentclass{beamer}
                \\usepackage[fontset=none,UTF8,a4paper,zihao=-4]{ctex}"
-               org-beamer-sectioning))
+     org-beamer-sectioning))
+  "Please see the info of `org-latex-classes', when `oxlc/org-latex-chinese-enable'
+set to t, its value will override the value of `oxlc/org-latex-classes' before exporting
+to latex."
+  :group 'org-export-latex-chinese)
 
-;; org不建议自定义org-latex-default-package-alist变量，但"inputenc" and "fontenc"两个宏包似乎和
-;; xelatex有冲突，调整默认值！
-(setf org-latex-default-packages-alist
-      (remove '("AUTO" "inputenc" t) org-latex-default-packages-alist))
-(setf org-latex-default-packages-alist
-      (remove '("T1" "fontenc" t) org-latex-default-packages-alist))
-(setf org-latex-default-packages-alist
-      (remove '("normalem" "ulem" t) org-latex-default-packages-alist))
+(defcustom oxlc/org-latex-default-packages-alist
+  (remove '("normalem" "ulem" t)
+          (remove '("T1" "fontenc" t)
+                  (remove '("AUTO" "inputenc" t)
+                          org-latex-default-packages-alist)))
+  "Please see the info of `org-latex-default-packages-alist', when `oxlc/org-latex-chinese-enable'
+set to t, its value will override the value of `org-latex-default-packages-alist' before exporting
+to latex.
 
-(setq  org-latex-packages-alist
-       '("
+org 不建议自定义 org-latex-default-package-alist 变量，但 'inputenc' and 'fontenc'
+两个宏包似乎和 xelatex 有冲突，调整！"
+  :group 'org-export-latex-chinese)
+
+(defcustom  oxlc/org-latex-packages-alist
+  '("
 %%% 默认使用的latex宏包 %%%
 \\usepackage{tikz}
 \\usepackage{CJKulem}
@@ -235,23 +246,70 @@
 \\setCJKmonofont{WenQuanYi Micro Hei}
 
 %%% 设置页面边距 %%%
-\\usepackage[top=2.54cm, bottom=2.54cm, left=3.17cm, right=3.17cm]{geometry} %
-"))
+\\usepackage[top=2.54cm, bottom=2.54cm, left=3.17cm, right=3.17cm]{geometry} %")
+  "Please see the info of `org-latex-packages-alist', when `oxlc/org-latex-chinese-enable'
+set to t, its value will override the value of `org-latex-packages-alist' before exporting
+to latex."
+  :group 'org-export-latex-chinese)
 
 ;; latex公式预览, 调整latex预览时使用的header,默认使用ctexart类
-(setq org-format-latex-header
-      (replace-regexp-in-string
-       "\\\\documentclass{.*}"
-       "\\\\documentclass[nofonts,UTF8]{ctexart}"
-       org-format-latex-header))
+(defcustom oxlc/org-format-latex-header
+  (replace-regexp-in-string
+   "\\\\documentclass{.*}"
+   "\\\\documentclass[nofonts,UTF8]{ctexart}"
+   org-format-latex-header)
+  "Please see the info of `org-format-latex-header', when `oxlc/org-latex-chinese-enable'
+set to t, its value will override the value of `org-format-latex-header' before exporting
+to latex."
+  :group 'org-export-latex-chinese)
 
-(defun eh-org-latex-compile (orig-fun texfile &optional snippet)
-  (let ((org-latex-pdf-process
-         (if snippet (car (cdr org-latex-commands))
-           (car org-latex-commands))))
+(defvar oxlc/ox-latex-chinese-enable nil
+  "判断是否开启 ox-latex-chinese.")
+
+(defvar oxlc/overrided-variables nil
+  "记录所有被 ox-latex-chinese 包强制覆盖得变量。")
+
+(defun oxlc/toggle-ox-latex-chinese (&optional force-enable)
+  "启用/禁用 ox-latex-chinese 包。"
+  (interactive)
+  (setq oxlc/ox-latex-chinese-enable
+        (or force-enable (not oxlc/ox-latex-chinese-enable)))
+  (if oxlc/ox-latex-chinese-enable
+      (progn (message "已经启用 ox-latex-chinese！")
+             (advice-add 'org-export-as :around #'oxlc/org-export-as)
+             (advice-add 'org-latex-compile :around #'oxlc/org-latex-compile))
+    (message "已经禁用 ox-latex-chinese！")
+    (advice-remove 'org-export-as #'oxlc/org-export-as)
+    (advice-remove 'org-latex-compile #'oxlc/org-latex-compile)))
+
+(defun oxlc/get-override-value (variable)
+  "返回 `variable' 对应的 ox-latex-chinese 变量的取值。"
+  (push arg oxlc/overrided-variables)
+  (symbol-value (intern (concat "oxlc/" (symbol-name variable)))))
+
+(defun oxlc/org-export-as (orig-fun backend &optional subtreep
+                                    visible-only body-only ext-plist)
+  (if oxlc/ox-latex-chinese-enable
+      (let ((org-latex-coding-system (oxlc/get-override-value 'org-latex-coding-system))
+            (org-latex-commands (oxlc/get-override-value 'org-latex-commands))
+            (org-latex-default-class (oxlc/get-override-value 'org-latex-default-class))
+            (org-latex-classes (oxlc/get-override-value 'org-latex-classes))
+            (org-latex-default-packages-alist (oxlc/get-override-value 'org-latex-default-packages-alist))
+            (org-format-latex-header (oxlc/get-override-value 'org-format-latex-header))
+            (org-latex-packages-alist (oxlc/get-override-value 'org-latex-packages-alist)))
+        (message (concat "注意：被 ox-latex-chinese 包 *强制* 覆盖得变量有："
+                         (mapconcat #'symbol-name (delete-dups oxlc/overrided-variables) ", ")
+                         "."))
+        (funcall orig-fun backend subtreep visible-only body-only ext-plist))
+    (funcall orig-fun backend subtreep visible-only body-only ext-plist)))
+
+(defun oxlc/org-latex-compile (orig-fun texfile &optional snippet)
+  (if oxlc/ox-latex-chinese-enable
+      (let ((org-latex-pdf-process
+             (if snippet (car (cdr org-latex-commands))
+               (car org-latex-commands))))
+        (funcall orig-fun texfile snippet))
     (funcall orig-fun texfile snippet)))
-
-(advice-add 'org-latex-compile :around #'eh-org-latex-compile)
 ;; #+END_SRC
 
 ;; * Footer
