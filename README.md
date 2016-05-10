@@ -11,13 +11,12 @@
     - [配置](#配置)
   - [常见错误排查和解决](#常见错误排查和解决)
     - [缺少必要的 Latex 宏包](#缺少必要的-latex-宏包)
-- [代码](#代码)
 
-# README<a id="orga1b4f1f"></a>
+# README<a id="org59c722f"></a>
 
-## 下载并安装 Texlive<a id="org48f50f1"></a>
+## 下载并安装 Texlive<a id="org0442fa9"></a>
 
-### 下载 Tex Live ISO 镜像<a id="org907f05c"></a>
+### 下载 Tex Live ISO 镜像<a id="orgdec5d0a"></a>
 
 TeX Live 支持 Linux，Windows 以及 MacOX 多种操作系统，安装方式多种多样，由于我这里网络不太稳定，所以我选择通过 Tex Live ISO 来安装 Tex Live （文件大小大约3G），
 
@@ -27,12 +26,12 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 1.  中国科学技术大学镜像：<http://mirrors.ustc.edu.cn/CTAN/systems/texlive/Images/>
 2.  清华大学镜像：<http://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/Images/>
 
-### 挂载已经下载的 ISO 镜像<a id="org64ccd11"></a>
+### 挂载已经下载的 ISO 镜像<a id="orga10adea"></a>
 
 1.  下载安装 winmount 或者 DAEMON Tools，这两个工具可以将 ISO 文件挂载到一个盘符，比直接解压缩快速方便。
 2.  将 ISO 镜像挂载到 “Z:\\”
 
-### 运行安装程序<a id="org33d2988"></a>
+### 运行安装程序<a id="org336092f"></a>
 
 1.  打开 “Z” 盘。
 2.  **完全安装** 请运行 “install-tl.bat”，这种方式比较省心，但很占空间。
@@ -40,13 +39,13 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 
 注：安装的时候建议关闭杀毒软件。
 
-### 设置安装参数<a id="org10ddae2"></a>
+### 设置安装参数<a id="org95d70a4"></a>
 
 运行安装程序后，会弹出一个窗口（比较丑陋）用于设置安装选项，在 “选择安装方案” 选项中选择 “scheme-small”，其它选项不变，然后开始安装（安装大概需要 5 分钟左右）。
 
 ![img](./snapshots/advanced-install.gif)
 
-### 安装所需要的 Latex 宏包<a id="org47617b6"></a>
+### 安装所需要的 Latex 宏包<a id="org771c89f"></a>
 
 1.  第一种方式：使用 Tex Live 管理器图形界面安装
 
@@ -69,26 +68,27 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 
             tlmgr install collection-langcjk collection-langchinese ctex ctex-faq bibtex8 environ trimspaces zhnumber wrapfig capt-of latexmk
 
-### 安装所需要的字体<a id="org8fbd002"></a>
+### 安装所需要的字体<a id="org434b294"></a>
 
 将所需要的字体文件（ttf或者ttc文件）拷贝到 window 字体目录中就可以了。
 
 1.  文泉驿微米黑：<http://wenq.org/wqy2/index.cgi?MicroHei>
 
-## 安装并配置 ox-latex-chinese<a id="org9be203a"></a>
+## 安装并配置 ox-latex-chinese<a id="org0e95d60"></a>
 
-### 安装<a id="orgad7f26a"></a>
+### 安装<a id="org363a738"></a>
 
 1.  配置 melpa: <http://melpa.org/#/getting-started>
 2.  M-x package-install RET ox-latex-chinese RET
 
-### 配置<a id="org26a41f2"></a>
+### 配置<a id="org40b74fd"></a>
 
     (require 'ox-latex-chinese)
+    (oxlc/toggle-ox-latex-chinese t)
 
-## 常见错误排查和解决<a id="org3601bbd"></a>
+## 常见错误排查和解决<a id="orgf494a8d"></a>
 
-### 缺少必要的 Latex 宏包<a id="orgc8d4a1e"></a>
+### 缺少必要的 Latex 宏包<a id="orgc474863"></a>
 
 1.  表现形式
 
@@ -135,104 +135,3 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
             tlmgr update -all
             tlmgr install wrapfig
     2.  如果没有找到 “wrapfig” 宏包，你需要找到哪个宏包包含 wrapfig.sty，一个简单的方式就是用 google 搜索 wrapfig.sty，一般会有相关的信息。
-
-# 代码<a id="org8e19f"></a>
-
-```lisp
-;; require
-(require 'org)
-(require 'ox)
-(require 'ox-latex)
-(require 'ox-latex-chinese)
-
-;; latex
-(setq org-latex-coding-system 'utf-8)
-;; 不要在latex输出文件中插入\maketitle
-
-;; (setq org-latex-title-command "")
-(setq org-latex-date-format "%Y-%m-%d")
-
-;; (setq org-export-with-LaTeX-fragments 'imagemagick)
-;; (setq org-latex-create-formula-image-program 'imagemagick)
-
-(setq org-latex-commands '(("xelatex -interaction nonstopmode -output-directory %o %f"
-                            "bibtex %b"
-                            "xelatex -interaction nonstopmode -output-directory %o %f"
-                            "xelatex -interaction nonstopmode -output-directory %o %f")
-                           ("xelatex -interaction nonstopmode -output-directory %o %f")))
-
-(setq org-latex-default-class "ctexart")
-
-(add-to-list 'org-latex-classes
-             '("ctexart"
-               "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexart}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-(add-to-list 'org-latex-classes
-             '("ctexrep"
-               "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexrep}"
-               ("\\part{%s}" . "\\part*{%s}")
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
-
-(add-to-list 'org-latex-classes
-             '("ctexbook"
-               "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexbook}"
-               ("\\part{%s}" . "\\part*{%s}")
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
-
-(add-to-list 'org-latex-classes
-             '("beamer"
-               "\\documentclass{beamer}
-               \\usepackage[fontset=none,UTF8,a4paper,zihao=-4]{ctex}"
-               org-beamer-sectioning))
-
-;; org不建议自定义org-latex-default-package-alist变量，但"inputenc" and "fontenc"两个宏包似乎和
-;; xelatex有冲突，调整默认值！
-(setf org-latex-default-packages-alist
-      (remove '("AUTO" "inputenc" t) org-latex-default-packages-alist))
-(setf org-latex-default-packages-alist
-      (remove '("T1" "fontenc" t) org-latex-default-packages-alist))
-(setf org-latex-default-packages-alist
-      (remove '("normalem" "ulem" t) org-latex-default-packages-alist))
-
-(setq  org-latex-packages-alist
-       '("
-%%% 默认使用的latex宏包 %%%
-\\usepackage{tikz}
-\\usepackage{CJKulem}
-\\usepackage{graphicx}
-
-%%% 设置中文字体 %%%
-\\setCJKmainfont[ItalicFont={KaiTi_GB2312}]{SimSun}% 文鼎宋体和楷书
-\\setCJKsansfont{WenQuanYi Micro Hei}% 文泉驿的黑体
-\\setCJKmonofont{WenQuanYi Micro Hei}
-
-%%% 设置页面边距 %%%
-\\usepackage[top=2.54cm, bottom=2.54cm, left=3.17cm, right=3.17cm]{geometry} %
-"))
-
-;; latex公式预览, 调整latex预览时使用的header,默认使用ctexart类
-(setq org-format-latex-header
-      (replace-regexp-in-string
-       "\\\\documentclass{.*}"
-       "\\\\documentclass[nofonts,UTF8]{ctexart}"
-       org-format-latex-header))
-
-(defun eh-org-latex-compile (orig-fun texfile &optional snippet)
-  (let ((org-latex-pdf-process
-         (if snippet (car (cdr org-latex-commands))
-           (car org-latex-commands))))
-    (funcall orig-fun texfile snippet)))
-
-(advice-add 'org-latex-compile :around #'eh-org-latex-compile)
-```
