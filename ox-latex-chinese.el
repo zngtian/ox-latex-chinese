@@ -351,7 +351,8 @@ to latex."
 
 (defun oxlc/org-export-as (orig-fun backend &optional subtreep
                                     visible-only body-only ext-plist)
-  (if oxlc/ox-latex-chinese-enable
+  (if (and oxlc/ox-latex-chinese-enable
+           (member backend '(latex beamer)))
       (let ((org-latex-coding-system (oxlc/get-override-value 'org-latex-coding-system))
             (org-latex-commands (oxlc/get-override-value 'org-latex-commands))
             (org-latex-default-class (oxlc/get-override-value 'org-latex-default-class))
