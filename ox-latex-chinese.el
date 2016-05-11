@@ -43,7 +43,8 @@
 ;; 2. 清华大学镜像：http://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/Images/
 
 ;; *** 挂载已经下载的 ISO 镜像
-;; 1. 下载安装 winmount 或者 DAEMON Tools，这两个工具可以将 ISO 文件挂载到一个盘符，比直接解压缩快速方便。
+;; 1. 下载安装 [[http://wincdemu.sysprogs.org/][wincdemu]], winmount 或者 DAEMON Tools，
+;;    这类工具可以将 ISO 文件挂载到一个盘符，比直接解压缩快速方便。
 ;; 2. 将 ISO 镜像挂载到 “Z:\”
 
 ;; *** 运行安装程序
@@ -292,19 +293,22 @@ to latex."
 
 (defun oxlc/generate-latex-fonts-setting ()
   "Generate a latex fonts setting."
-  (format
-   "
-\\setCJKmainfont[ItalicFont={%s}]{%s}
-\\setCJKsansfont{%s}
-\\setCJKmonofont{%s}"
-   (oxlc/get-available-font
-    (cdr (assoc 'CJKmainfont-italic oxlc/org-latex-fonts)))
-   (oxlc/get-available-font
-    (cdr (assoc 'CJKmainfont oxlc/org-latex-fonts)))
-   (oxlc/get-available-font
-    (cdr (assoc 'CJKsansfont oxlc/org-latex-fonts)))
-   (oxlc/get-available-font
-    (cdr (assoc 'CJKmonofont oxlc/org-latex-fonts)))))
+  (let ((mainfont-italic
+         (oxlc/get-available-font
+          (cdr (assoc 'CJKmainfont-italic oxlc/org-latex-fonts))))
+        (mainfont
+         (oxlc/get-available-font
+          (cdr (assoc 'CJKmainfont oxlc/org-latex-fonts))))
+        (sansfont
+         (oxlc/get-available-font
+          (cdr (assoc 'CJKsansfont oxlc/org-latex-fonts))))
+        (monofont
+         (oxlc/get-available-font
+          (cdr (assoc 'CJKmonofont oxlc/org-latex-fonts)))))
+    (concat
+     (format "\\setCJKmainfont[ItalicFont={%s}]{%s}\n" mainfont-italic mainfont)
+     (format "\\setCJKsansfont{%s}\n" sansfont)
+     (format "\\setCJKmonofont{%s}\n" monofont))))
 
 (defun oxlc/get-available-font (fonts-list)
   (car (cl-remove-if
