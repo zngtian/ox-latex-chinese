@@ -337,9 +337,12 @@ to latex."
 (defun oxlc/font-available-p (fontname)
   (mapcar #'(lambda (x)
               (substring-no-properties x))
-          (cl-remove-if #'(lambda (x)
-                            (not (string-match-p (concat "^" fontname "$") x)))
-                        (font-family-list))))
+          (delq nil (mapcar
+                     #'(lambda (x)
+                         (when (or (string= fontname x)
+                                   (string= (string-as-unibyte fontname) x))
+                           fontname))
+                     (font-family-list)))))
 
 (defun oxlc/get-override-value (variable)
   "返回 `variable' 对应的 ox-latex-chinese 变量的取值。"
