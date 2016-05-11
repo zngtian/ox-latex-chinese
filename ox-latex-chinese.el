@@ -30,6 +30,17 @@
 ;;; Commentary:
 
 ;; * README                                                             :README:
+;; ** 简介
+;; ox-latex-chinese 是一个 org-mode 工具，它可以帮助 org-mode 中文用户简单快速的
+;; 配置 "org->latex->pdf" 工作环境。
+
+;; 注意：这个工具只是让 中文 pdf *基本正确* 的生成，如果你需要生成 *完美* 的中文 pdf，
+;; 就需要花时间深入的了解下面工具：
+
+;; 1. TeX 系统，比如：TexLive
+;; 2. Ctex 宏包以及其相关工具（实现中文 LaTeX 的主要方式）
+;; 3. ox-latex.el (org-mode 的 Latex 导出模块)
+
 ;; ** 下载并安装 Texlive
 ;; *** 下载 Tex Live ISO 镜像
 ;; TeX Live 支持 Linux，Windows 以及 MacOX 多种操作系统，安装方式多种多样，
