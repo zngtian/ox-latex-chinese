@@ -314,14 +314,14 @@ to latex."
         (cjkmainfont (oxlc/get-available-font 'CJKmainfont))
         (cjksansfont (oxlc/get-available-font 'CJKsansfont))
         (cjkmonofont (oxlc/get-available-font 'CJKmonofont)))
-    (concat
-     (when mainfont (format "\n\\setmainfont{%s}\n" mainfont))
-     (when cjkmainfont
-       (if cjkmainfont-italic
-           (format "\\setCJKmainfont[ItalicFont={%s}]{%s}\n" cjkmainfont-italic cjkmainfont)
-         (format "\\setCJKmainfont{%s}\n" cjkmainfont)))
-     (when cjksansfont (format "\\setCJKsansfont{%s}\n" cjksansfont))
-     (when cjkmonofont (format "\\setCJKmonofont{%s}\n" cjkmonofont)))))
+    (concat "\n"
+            (when mainfont (format "\\setmainfont{%s}\n" mainfont))
+            (when cjkmainfont
+              (if cjkmainfont-italic
+                  (format "\\setCJKmainfont[ItalicFont={%s}]{%s}\n" cjkmainfont-italic cjkmainfont)
+                (format "\\setCJKmainfont{%s}\n" cjkmainfont)))
+            (when cjksansfont (format "\\setCJKsansfont{%s}\n" cjksansfont))
+            (when cjkmonofont (format "\\setCJKmonofont{%s}\n" cjkmonofont)))))
 
 (defun oxlc/get-available-font (fontclass)
   (let* ((fonts-list (cdr (assoc fontclass oxlc/org-latex-fonts)))
