@@ -185,7 +185,8 @@ to latex."
   :group 'org-export-latex-chinese)
 
 (defcustom oxlc/org-latex-fonts
-  '((CJKmainfont "SimSun" "宋体" "新宋体" "宋体" "STSong" "STZhongson" "华文中宋")
+  '((mainfont "Time New Roman")
+    (CJKmainfont "SimSun" "宋体" "新宋体" "宋体" "STSong" "STZhongson" "华文中宋")
     (CJKmainfont-italic "KaiTi_GB2312" "楷体" "KaiTi" "楷体_GB2312" "STKaiti" "华文行楷")
     (CJKsansfont "WenQuanYi Micro Hei" "文泉驿微米黑" "文泉驿等宽微米黑" "微软雅黑"
                  "Microsoft Yahei" "Microsoft_Yahei"  "文泉驿等宽正黑" "黑体"
@@ -304,22 +305,29 @@ to latex."
 
 (defun oxlc/generate-latex-fonts-setting ()
   "Generate a latex fonts setting."
-  (let ((mainfont-italic
+  (let ((mainfont
+         (oxlc/get-available-font
+          (cdr (assoc 'mainfont oxlc/org-latex-fonts))))
+        (cjkmainfont-italic
          (oxlc/get-available-font
           (cdr (assoc 'CJKmainfont-italic oxlc/org-latex-fonts))))
-        (mainfont
+        (cjkmainfont
          (oxlc/get-available-font
           (cdr (assoc 'CJKmainfont oxlc/org-latex-fonts))))
-        (sansfont
+        (cjksansfont
          (oxlc/get-available-font
           (cdr (assoc 'CJKsansfont oxlc/org-latex-fonts))))
-        (monofont
+        (cjkmonofont
          (oxlc/get-available-font
           (cdr (assoc 'CJKmonofont oxlc/org-latex-fonts)))))
     (concat
-     (format "\\setCJKmainfont[ItalicFont={%s}]{%s}\n" mainfont-italic mainfont)
-     (format "\\setCJKsansfont{%s}\n" sansfont)
-     (format "\\setCJKmonofont{%s}\n" monofont))))
+     (when mainfont (format "\\setmainfont{%s}\n" mainfont))
+     (when cjkmainfont
+       (if cjkmainfont-italic
+           (format "\\setCJKmainfont[ItalicFont={%s}]{%s}\n" cjkmainfont-italic cjkmainfont)
+         (format "\\setCJKmainfont{%s}\n" cjkmainfont)))
+     (when cjksansfont (format "\\setCJKsansfont{%s}\n" cjksansfont))
+     (when cjkmonofont (format "\\setCJKmonofont{%s}\n" cjkmonofont)))))
 
 (defun oxlc/get-available-font (fonts-list)
   (car (cl-remove-if
