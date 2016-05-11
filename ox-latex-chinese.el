@@ -315,7 +315,7 @@ to latex."
         (cjksansfont (oxlc/get-available-font 'CJKsansfont))
         (cjkmonofont (oxlc/get-available-font 'CJKmonofont)))
     (concat
-     (when mainfont (format "\\setmainfont{%s}\n" mainfont))
+     (when mainfont (format "\n\\setmainfont{%s}\n" mainfont))
      (when cjkmainfont
        (if cjkmainfont-italic
            (format "\\setCJKmainfont[ItalicFont={%s}]{%s}\n" cjkmainfont-italic cjkmainfont)
