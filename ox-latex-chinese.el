@@ -185,7 +185,7 @@ to latex."
   :group 'org-export-latex-chinese)
 
 (defcustom oxlc/org-latex-fonts
-  '((mainfont "Time New Roman")
+  '((mainfont "Times New Roman")
     (CJKmainfont "SimSun" "宋体" "新宋体" "宋体" "STSong" "STZhongson" "华文中宋")
     (CJKmainfont-italic "KaiTi_GB2312" "楷体" "KaiTi" "楷体_GB2312" "STKaiti" "华文行楷")
     (CJKsansfont "WenQuanYi Micro Hei" "文泉驿微米黑" "文泉驿等宽微米黑" "微软雅黑"
@@ -305,21 +305,11 @@ to latex."
 
 (defun oxlc/generate-latex-fonts-setting ()
   "Generate a latex fonts setting."
-  (let ((mainfont
-         (oxlc/get-available-font
-          (cdr (assoc 'mainfont oxlc/org-latex-fonts))))
-        (cjkmainfont-italic
-         (oxlc/get-available-font
-          (cdr (assoc 'CJKmainfont-italic oxlc/org-latex-fonts))))
-        (cjkmainfont
-         (oxlc/get-available-font
-          (cdr (assoc 'CJKmainfont oxlc/org-latex-fonts))))
-        (cjksansfont
-         (oxlc/get-available-font
-          (cdr (assoc 'CJKsansfont oxlc/org-latex-fonts))))
-        (cjkmonofont
-         (oxlc/get-available-font
-          (cdr (assoc 'CJKmonofont oxlc/org-latex-fonts)))))
+  (let ((mainfont (oxlc/get-available-font 'mainfont))
+        (cjkmainfont-italic (oxlc/get-available-font 'CJKmainfont-italic))
+        (cjkmainfont (oxlc/get-available-font 'CJKmainfont))
+        (cjksansfont (oxlc/get-available-font 'CJKsansfont))
+        (cjkmonofont (oxlc/get-available-font 'CJKmonofont)))
     (concat
      (when mainfont (format "\\setmainfont{%s}\n" mainfont))
      (when cjkmainfont
@@ -329,11 +319,16 @@ to latex."
      (when cjksansfont (format "\\setCJKsansfont{%s}\n" cjksansfont))
      (when cjkmonofont (format "\\setCJKmonofont{%s}\n" cjkmonofont)))))
 
-(defun oxlc/get-available-font (fonts-list)
-  (car (cl-remove-if
-        #'(lambda (fontname)
-            (not (oxlc/font-available-p fontname)))
-        fonts-list)))
+(defun oxlc/get-available-font (fontclass)
+  (let* ((fonts-list (cdr (assoc fontclass oxlc/org-latex-fonts)))
+         (font (car (cl-remove-if
+                     #'(lambda (fontname)
+                         (not (oxlc/font-available-p fontname)))
+                     fonts-list))))
+    (unless font
+      (message (format "org-latex-chinese: Emacs can't find an available (%s) font for latex, ignore!"
+                       (symbol-name fontclass))))
+    font))
 
 (defun oxlc/font-available-p (fontname)
   (mapcar #'(lambda (x)
