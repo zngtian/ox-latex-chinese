@@ -100,11 +100,6 @@
 ;;    tlmgr install collection-langcjk collection-langchinese ctex ctex-faq bibtex8 environ trimspaces zhnumber wrapfig capt-of latexmk
 ;;    #+END_EXAMPLE
 
-;; *** 安装所需要的字体
-;; 将所需要的字体文件（ttf或者ttc文件）拷贝到 window 字体目录中就可以了。
-
-;; 1. 文泉驿微米黑：http://wenq.org/wqy2/index.cgi?MicroHei
-
 ;; ** 安装并配置 ox-latex-chinese
 ;; *** 安装
 ;; 1. 配置 melpa: http://melpa.org/#/getting-started
