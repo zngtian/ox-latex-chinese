@@ -6,7 +6,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/ox-latex-chinese
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.4") (ebib "1.0") (chinese-pyim "0.1"))
+;; Package-Requires: ((emacs "24.4"))
 
 ;;; License:
 
