@@ -172,6 +172,18 @@ set to t, its value will override the value of `org-latex-coding-system' before 
 to latex."
   :group 'org-export-latex-chinese)
 
+(defcustom oxlc/org-latex-fonts
+  '((CJKmainfont "SimSun" "宋体" "新宋体" "宋体" "STSong" "STZhongson" "华文中宋")
+    (CJKmainfont-italic "KaiTi_GB2312" "楷体" "KaiTi" "楷体_GB2312" "STKaiti" "华文行楷")
+    (CJKsansfont "WenQuanYi Micro Hei" "文泉驿微米黑" "文泉驿等宽微米黑" "微软雅黑"
+                 "Microsoft Yahei" "Microsoft_Yahei"  "文泉驿等宽正黑" "黑体"
+                 "文泉驿正黑" "文泉驿点阵正黑" "SimHei" "华文细黑")
+    (CJKmonofont "WenQuanYi Micro Hei" "文泉驿微米黑" "文泉驿等宽微米黑" "微软雅黑"
+                 "Microsoft Yahei" "Microsoft_Yahei"  "文泉驿等宽正黑" "黑体"
+                 "文泉驿正黑" "文泉驿点阵正黑" "SimHei" "华文细黑"))
+  "Set fonts candidates which will used by latex."
+  :group 'org-export-latex-chinese)
+
 (defcustom oxlc/org-latex-commands
   '(("xelatex -interaction nonstopmode -output-directory %o %f"
      "bibtex %b"
@@ -234,16 +246,12 @@ org 不建议自定义 org-latex-default-package-alist 变量，但 'inputenc' a
   :group 'org-export-latex-chinese)
 
 (defcustom  oxlc/org-latex-packages-alist
-  '("
+  (list
+   "
 %%% 默认使用的latex宏包 %%%
 \\usepackage{tikz}
 \\usepackage{CJKulem}
 \\usepackage{graphicx}
-
-%%% 设置中文字体 %%%
-\\setCJKmainfont[ItalicFont={KaiTi_GB2312}]{SimSun}% 文鼎宋体和楷书
-\\setCJKsansfont{WenQuanYi Micro Hei}% 文泉驿的黑体
-\\setCJKmonofont{WenQuanYi Micro Hei}
 
 %%% 设置页面边距 %%%
 \\usepackage[top=2.54cm, bottom=2.54cm, left=3.17cm, right=3.17cm]{geometry} %")
@@ -282,6 +290,35 @@ to latex."
     (advice-remove 'org-export-as #'oxlc/org-export-as)
     (advice-remove 'org-latex-compile #'oxlc/org-latex-compile)))
 
+(defun oxlc/generate-latex-fonts-setting ()
+  "Generate a latex fonts setting."
+  (format
+   "
+\\setCJKmainfont[ItalicFont={%s}]{%s}
+\\setCJKsansfont{%s}
+\\setCJKmonofont{%s}"
+   (oxlc/get-available-font
+    (cdr (assoc 'CJKmainfont-italic oxlc/org-latex-fonts)))
+   (oxlc/get-available-font
+    (cdr (assoc 'CJKmainfont oxlc/org-latex-fonts)))
+   (oxlc/get-available-font
+    (cdr (assoc 'CJKsansfont oxlc/org-latex-fonts)))
+   (oxlc/get-available-font
+    (cdr (assoc 'CJKmonofont oxlc/org-latex-fonts)))))
+
+(defun oxlc/get-available-font (fonts-list)
+  (car (cl-remove-if
+        #'(lambda (fontname)
+            (not (oxlc/font-available-p fontname)))
+        fonts-list)))
+
+(defun oxlc/font-available-p (fontname)
+  (mapcar #'(lambda (x)
+              (substring-no-properties x))
+          (cl-remove-if #'(lambda (x)
+                            (not (string-match-p (concat "^" fontname "$") x)))
+                        (font-family-list))))
+
 (defun oxlc/get-override-value (variable)
   "返回 `variable' 对应的 ox-latex-chinese 变量的取值。"
   (push variable oxlc/overrided-variables)
@@ -296,7 +333,9 @@ to latex."
             (org-latex-classes (oxlc/get-override-value 'org-latex-classes))
             (org-latex-default-packages-alist (oxlc/get-override-value 'org-latex-default-packages-alist))
             (org-format-latex-header (oxlc/get-override-value 'org-format-latex-header))
-            (org-latex-packages-alist (oxlc/get-override-value 'org-latex-packages-alist)))
+            (org-latex-packages-alist
+             `(,(oxlc/generate-latex-fonts-setting)
+               ,@(oxlc/get-override-value 'org-latex-packages-alist))))
         (message (concat "注意：被 ox-latex-chinese 包 *强制* 覆盖得变量有："
                          (mapconcat #'symbol-name (delete-dups oxlc/overrided-variables) ", ")
                          "."))
