@@ -111,6 +111,15 @@
 ;; (oxlc/toggle-ox-latex-chinese t)
 ;; #+END_EXAMPLE
 
+;; ** 设置 LaTeX 片断预览功能
+;; 1. 确保 emacs 可以显示 png 文件，具体参考：ftp://ftp.gnu.org/gnu/emacs/windows/README
+;; 2. 安装 [[http://www.imagemagick.org/][imagemagick]] 和 [[http://ghostscript.com/][ghostscript]]
+;; 3. 设置 emacs
+;;    #+BEGIN_EXAMPLE
+;;    ;; (setq org-latex-create-formula-image-program 'dvipng)   ;不支持中文
+;;    (setq org-latex-create-formula-image-program 'imagemagick) ;支持中文
+;;    #+END_EXAMPLE
+
 ;; ** 常见错误排查和解决
 ;; *** 缺少必要的 Latex 宏包
 ;; **** 表现形式
@@ -160,14 +169,6 @@
 ;;     tlmgr install wrapfig
 ;;     #+END_EXAMPLE
 ;;  2. 如果没有找到 “wrapfig” 宏包，你需要找到哪个宏包包含 wrapfig.sty，一个简单的方式就是用 google 搜索 wrapfig.sty，一般会有相关的信息。
-;; *** 无法预览 Latex 片断
-;; 1. 确保 emacs 可以显示 png 文件，具体参考：ftp://ftp.gnu.org/gnu/emacs/windows/README
-;; 2. 安装 [[http://www.imagemagick.org/][imagemagick]] 和 [[http://ghostscript.com/][ghostscript]]
-;; 3. 设置 emacs
-;; #+BEGIN_EXAMPLE
-;; ;; (setq org-latex-create-formula-image-program 'dvipng)   ;不支持中文
-;; (setq org-latex-create-formula-image-program 'imagemagick) ;支持中文
-;; #+END_EXAMPLE
 
 ;;; Code:
 ;; * 代码                                                          :code:
