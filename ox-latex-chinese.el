@@ -41,6 +41,8 @@
 ;; 2. Ctex 宏包以及其相关工具（实现中文 LaTeX 的主要方式）
 ;; 3. ox-latex.el (org-mode 的 Latex 导出模块)
 
+;; [[./snapshots/ox-latex-chinese.gif]]
+
 ;; ** 下载并安装 Texlive
 ;; *** 下载 Tex Live ISO 镜像
 ;; TeX Live 支持 Linux，Windows 以及 MacOX 多种操作系统，安装方式多种多样，
