@@ -34,12 +34,18 @@
 ;; ox-latex-chinese 是一个 org-mode 工具，它可以帮助 org-mode 中文用户简单快速的
 ;; 配置 "org->latex->pdf" 工作环境。
 
-;; 注意：这个工具只是让 中文 pdf *基本正确* 的生成，如果你需要生成 *完美* 的中文 pdf，
+;; 注意， 这个工具只是让 中文 pdf *基本正确* 的生成，如果你需要生成 *完美* 的中文 pdf，
 ;; 就需要花时间深入的了解下面工具：
 
 ;; 1. TeX 系统，比如：TexLive
 ;; 2. Ctex 宏包以及其相关工具（实现中文 LaTeX 的主要方式）
 ;; 3. ox-latex.el (org-mode 的 Latex 导出模块)
+
+;; 另外需要用户了解的问题是：TeX 的引擎有许多种类，比如： pdftex, xetex 或者 luatex,
+;; 每一种引擎都有特殊的中文设置，ox-latex 可以通过设置来支持上述所有 TeX 引擎,
+;; 而 ox-latex-chinese *硬绑定* 到 xetex, *只支持 xetex* , 因为 xetex 可以
+;; 通过 xft 来调用系统中的字体，中文配置比较容易，但 xetex 生成 pdf 的速度比较慢，
+;; *我在这里告诉大家，不要因为 ox-latex-chinese 的方便而限制了自己的思路！*
 
 ;; [[./snapshots/ox-latex-chinese.gif]]
 

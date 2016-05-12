@@ -13,23 +13,28 @@
   - [常见错误排查和解决](#常见错误排查和解决)
     - [缺少必要的 Latex 宏包](#缺少必要的-latex-宏包)
 
-# README<a id="org9931266"></a>
+# README<a id="org20c9ee1"></a>
 
-## 简介<a id="org9175b8f"></a>
+## 简介<a id="orge70c22b"></a>
 
 ox-latex-chinese 是一个 org-mode 工具，它可以帮助 org-mode 中文用户简单快速的配置 "org->latex->pdf" 工作环境。
 
-注意：这个工具只是让 中文 pdf **基本正确** 的生成，如果你需要生成 **完美** 的中文 pdf，就需要花时间深入的了解下面工具：
+注意， 这个工具只是让 中文 pdf **基本正确** 的生成，如果你需要生成 **完美** 的中文 pdf，就需要花时间深入的了解下面工具：
 
 1.  TeX 系统，比如：TexLive
 2.  Ctex 宏包以及其相关工具（实现中文 LaTeX 的主要方式）
 3.  ox-latex.el (org-mode 的 Latex 导出模块)
 
+另外需要用户了解的问题是：TeX 的引擎有许多种类，比如： pdftex, xetex 或者 luatex,
+每一种引擎都有特殊的中文设置，ox-latex 可以通过设置来支持上述所有 TeX 引擎,
+而 ox-latex-chinese **硬绑定** 到 xetex, **只支持 xetex** , 因为 xetex 可以通过 xft 来调用系统中的字体，中文配置比较容易，但 xetex 生成 pdf 的速度比较慢，
+**我在这里告诉大家，不要因为 ox-latex-chinese 的方便而限制了自己的思路！**
+
 ![img](./snapshots/ox-latex-chinese.gif)
 
-## 下载并安装 Texlive<a id="org50155eb"></a>
+## 下载并安装 Texlive<a id="org7ee7536"></a>
 
-### 下载 Tex Live ISO 镜像<a id="org7746f8c"></a>
+### 下载 Tex Live ISO 镜像<a id="orgb88b555"></a>
 
 TeX Live 支持 Linux，Windows 以及 MacOX 多种操作系统，安装方式多种多样，由于我这里网络不太稳定，所以我选择通过 Tex Live ISO 来安装 Tex Live （文件大小大约3G），
 
@@ -39,12 +44,12 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 1.  中国科学技术大学镜像：<http://mirrors.ustc.edu.cn/CTAN/systems/texlive/Images/>
 2.  清华大学镜像：<http://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/Images/>
 
-### 挂载已经下载的 ISO 镜像<a id="orgadb1c4a"></a>
+### 挂载已经下载的 ISO 镜像<a id="org6f95404"></a>
 
 1.  下载安装 [wincdemu](http://wincdemu.sysprogs.org/), winmount 或者 DAEMON Tools，这类工具可以将 ISO 文件挂载到一个盘符，比直接解压缩快速方便。
 2.  将 ISO 镜像挂载到 “Z:\\”
 
-### 运行安装程序<a id="orgc579f3e"></a>
+### 运行安装程序<a id="orge163581"></a>
 
 1.  打开 “Z” 盘。
 2.  **完全安装** 请运行 “install-tl.bat”，这种方式比较省心，但很占空间。
@@ -52,13 +57,13 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 
 注：安装的时候建议关闭杀毒软件。
 
-### 设置安装参数<a id="org5adbdc4"></a>
+### 设置安装参数<a id="org346df86"></a>
 
 运行安装程序后，会弹出一个窗口（比较丑陋）用于设置安装选项，在 “选择安装方案” 选项中选择 “scheme-small”，其它选项不变，然后开始安装（安装大概需要 5 分钟左右）。
 
 ![img](./snapshots/advanced-install.gif)
 
-### 安装所需要的 Latex 宏包<a id="org01e409e"></a>
+### 安装所需要的 Latex 宏包<a id="org0e6cad2"></a>
 
 1.  第一种方式：使用 Tex Live 管理器图形界面安装
 
@@ -81,19 +86,19 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 
             tlmgr install collection-langcjk collection-langchinese ctex ctex-faq bibtex8 environ trimspaces zhnumber wrapfig capt-of latexmk dvipng
 
-## 安装并配置 ox-latex-chinese<a id="org09b3bf5"></a>
+## 安装并配置 ox-latex-chinese<a id="org1c0a6f4"></a>
 
-### 安装<a id="orgaa808be"></a>
+### 安装<a id="org613b5c1"></a>
 
 1.  配置 melpa: <http://melpa.org/#/getting-started>
 2.  M-x package-install RET ox-latex-chinese RET
 
-### 配置<a id="orgf1c6f0a"></a>
+### 配置<a id="orgfc902e4"></a>
 
     (require 'ox-latex-chinese)
     (oxlc/toggle-ox-latex-chinese t)
 
-## 设置 LaTeX 片断预览功能<a id="orgcc8df5d"></a>
+## 设置 LaTeX 片断预览功能<a id="org2e04496"></a>
 
 1.  确保 emacs 可以显示 png 文件，具体参考：<ftp://ftp.gnu.org/gnu/emacs/windows/README>
 2.  安装 [imagemagick](http://www.imagemagick.org/) 和 [ghostscript](http://ghostscript.com/)
@@ -104,9 +109,9 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
         (setq org-format-latex-options
               (plist-put org-format-latex-options :scale 1.5))     ;调整 LaTeX 预览图片的大小
 
-## 常见错误排查和解决<a id="org6393f12"></a>
+## 常见错误排查和解决<a id="orge5844a1"></a>
 
-### 缺少必要的 Latex 宏包<a id="org759f3a2"></a>
+### 缺少必要的 Latex 宏包<a id="org9fa7125"></a>
 
 1.  表现形式
 
