@@ -116,7 +116,7 @@
 ;; 2. 安装 [[http://www.imagemagick.org/][imagemagick]] 和 [[http://ghostscript.com/][ghostscript]]
 ;; 3. 设置 emacs
 ;;    #+BEGIN_EXAMPLE
-;;    (setq org-latex-create-formula-image-program 'imagemagick) ;支持中文
+;;    (setq org-latex-create-formula-image-program 'imagemagick) ;必要设置，用于支持 xelatex
 ;;    (setq org-format-latex-options
 ;;          (plist-put org-format-latex-options :scale 1.5))     ;调整 LaTeX 预览图片的大小
 ;;    #+END_EXAMPLE
@@ -278,15 +278,6 @@ set to t, its value will override the value of `org-latex-packages-alist' before
 to latex."
   :group 'org-export-latex-chinese)
 
-(defcustom oxlc/org-latex-create-formula-image-program 'imagemagick
-  "Please see the info of `org-latex-create-formula-image-program', when
-`oxlc/org-latex-chinese-enable' set to t, its value will override the value of
-`org-latex-create-formula-image-program' before exporting to latex.
-
-ox-latex-chinese use xelatex by default, which can't generate dvi file, so
-dvipng is useless for ox-latex-chinese."
-  :group 'org-export-latex-chinese)
-
 ;; latex公式预览, 调整latex预览时使用的header,默认使用ctexart类
 (defcustom oxlc/org-format-latex-header
   (replace-regexp-in-string
@@ -303,7 +294,6 @@ to latex."
 
 (defconst oxlc/overrided-variables
   '(org-latex-packages-alist
-    org-latex-create-formula-image-program
     org-format-latex-header
     org-latex-default-packages-alist
     org-latex-classes
@@ -368,7 +358,7 @@ to latex."
         (funcall orig-fun backend subtreep visible-only body-only ext-plist))
     (funcall orig-fun backend subtreep visible-only body-only ext-plist)))
 
-(defun oxlc/org-toggle-latex-fragment (orig-fun &optional arg)
+(defun oxlc/org-create-formula-image-with-imagemagick (orig-fun string tofile options buffer)
   (interactive)
   (if oxlc/ox-latex-chinese-enable
       (let ((org-latex-coding-system (oxlc/get-override-value 'org-latex-coding-system))
@@ -377,13 +367,11 @@ to latex."
             (org-latex-classes (oxlc/get-override-value 'org-latex-classes))
             (org-latex-default-packages-alist (oxlc/get-override-value 'org-latex-default-packages-alist))
             (org-format-latex-header (oxlc/get-override-value 'org-format-latex-header))
-            (org-org-latex-create-formula-image-program
-             (oxlc/get-override-value 'org-latex-create-formula-image-program))
             (org-latex-packages-alist
              `(,(oxlc/generate-latex-fonts-setting)
                ,@(oxlc/get-override-value 'org-latex-packages-alist))))
-        (funcall orig-fun arg))
-    (funcall orig-fun arg)))
+        (funcall orig-fun string tofile options buffer))
+    (funcall orig-fun string tofile options buffer)))
 
 (defun oxlc/org-latex-compile (orig-fun texfile &optional snippet)
   (if oxlc/ox-latex-chinese-enable
@@ -405,11 +393,13 @@ to latex."
                          (mapconcat #'symbol-name oxlc/overrided-variables ", ")
                          "."))
         (advice-add 'org-export-as :around #'oxlc/org-export-as)
-        (advice-add 'org-toggle-latex-fragment :around #'oxlc/org-toggle-latex-fragment)
+        (advice-add 'org-create-formula-image-with-imagemagick
+                    :around #'oxlc/org-create-formula-image-with-imagemagick)
         (advice-add 'org-latex-compile :around #'oxlc/org-latex-compile))
     (message "ox-latex-chinese is disabled.")
     (advice-remove 'org-export-as #'oxlc/org-export-as)
-    (advice-remove 'org-toggle-latex-fragment #'oxlc/org-toggle-latex-fragment)
+    (advice-remove 'org-create-formula-image-with-imagemagick
+                   #'oxlc/org-create-formula-image-with-imagemagick)
     (advice-remove 'org-latex-compile #'oxlc/org-latex-compile)))
 ;; #+END_SRC
 
