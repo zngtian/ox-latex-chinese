@@ -13,9 +13,9 @@
   - [常见错误排查和解决](#常见错误排查和解决)
     - [缺少必要的 Latex 宏包](#缺少必要的-latex-宏包)
 
-# README<a id="org4bedf8f"></a>
+# README<a id="org19f700a"></a>
 
-## 简介<a id="org4868744"></a>
+## 简介<a id="orge19271d"></a>
 
 ox-latex-chinese 是一个 org-mode 工具，它可以帮助 org-mode 中文用户简单快速的配置 "org->latex->pdf" 工作环境。
 
@@ -27,9 +27,9 @@ ox-latex-chinese 是一个 org-mode 工具，它可以帮助 org-mode 中文用�
 
 ![img](./snapshots/ox-latex-chinese.gif)
 
-## 下载并安装 Texlive<a id="org8eb69c7"></a>
+## 下载并安装 Texlive<a id="orgb7f210a"></a>
 
-### 下载 Tex Live ISO 镜像<a id="org3a24156"></a>
+### 下载 Tex Live ISO 镜像<a id="org33675ef"></a>
 
 TeX Live 支持 Linux，Windows 以及 MacOX 多种操作系统，安装方式多种多样，由于我这里网络不太稳定，所以我选择通过 Tex Live ISO 来安装 Tex Live （文件大小大约3G），
 
@@ -39,12 +39,12 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 1.  中国科学技术大学镜像：<http://mirrors.ustc.edu.cn/CTAN/systems/texlive/Images/>
 2.  清华大学镜像：<http://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/Images/>
 
-### 挂载已经下载的 ISO 镜像<a id="orged03db2"></a>
+### 挂载已经下载的 ISO 镜像<a id="org7eb3f9b"></a>
 
 1.  下载安装 [wincdemu](http://wincdemu.sysprogs.org/), winmount 或者 DAEMON Tools，这类工具可以将 ISO 文件挂载到一个盘符，比直接解压缩快速方便。
 2.  将 ISO 镜像挂载到 “Z:\\”
 
-### 运行安装程序<a id="orgb59c614"></a>
+### 运行安装程序<a id="orgb3992c1"></a>
 
 1.  打开 “Z” 盘。
 2.  **完全安装** 请运行 “install-tl.bat”，这种方式比较省心，但很占空间。
@@ -52,13 +52,13 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 
 注：安装的时候建议关闭杀毒软件。
 
-### 设置安装参数<a id="orgd9b1707"></a>
+### 设置安装参数<a id="org4ffa2fa"></a>
 
 运行安装程序后，会弹出一个窗口（比较丑陋）用于设置安装选项，在 “选择安装方案” 选项中选择 “scheme-small”，其它选项不变，然后开始安装（安装大概需要 5 分钟左右）。
 
 ![img](./snapshots/advanced-install.gif)
 
-### 安装所需要的 Latex 宏包<a id="orga15637a"></a>
+### 安装所需要的 Latex 宏包<a id="org2f6169d"></a>
 
 1.  第一种方式：使用 Tex Live 管理器图形界面安装
 
@@ -81,30 +81,31 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 
             tlmgr install collection-langcjk collection-langchinese ctex ctex-faq bibtex8 environ trimspaces zhnumber wrapfig capt-of latexmk dvipng
 
-## 安装并配置 ox-latex-chinese<a id="org38fe27a"></a>
+## 安装并配置 ox-latex-chinese<a id="orgbd502e1"></a>
 
-### 安装<a id="org00ee0ba"></a>
+### 安装<a id="org7a3141a"></a>
 
 1.  配置 melpa: <http://melpa.org/#/getting-started>
 2.  M-x package-install RET ox-latex-chinese RET
 
-### 配置<a id="org76861ec"></a>
+### 配置<a id="org004e1b8"></a>
 
     (require 'ox-latex-chinese)
     (oxlc/toggle-ox-latex-chinese t)
 
-## 设置 LaTeX 片断预览功能<a id="orgc3a3115"></a>
+## 设置 LaTeX 片断预览功能<a id="orgf396955"></a>
 
 1.  确保 emacs 可以显示 png 文件，具体参考：<ftp://ftp.gnu.org/gnu/emacs/windows/README>
 2.  安装 [imagemagick](http://www.imagemagick.org/) 和 [ghostscript](http://ghostscript.com/)
 3.  设置 emacs
 
-        ;; (setq org-latex-create-formula-image-program 'dvipng)   ;不支持中文
         (setq org-latex-create-formula-image-program 'imagemagick) ;支持中文
+        (setq org-format-latex-options
+              (plist-put org-format-latex-options :scale 1.5))     ;调整 LaTeX 预览图片的大小
 
-## 常见错误排查和解决<a id="org621734b"></a>
+## 常见错误排查和解决<a id="org61578bc"></a>
 
-### 缺少必要的 Latex 宏包<a id="org3eaa3c3"></a>
+### 缺少必要的 Latex 宏包<a id="org0aff322"></a>
 
 1.  表现形式
 
