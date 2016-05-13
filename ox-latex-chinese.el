@@ -125,7 +125,7 @@
 ;;    ;; (setq org-latex-create-formula-image-program 'dvipng)   ;速度很快，但 *默认* 不支持中文
 ;;    (setq org-latex-create-formula-image-program 'imagemagick) ;速度较慢，但支持中文
 ;;    (setq org-format-latex-options
-;;          (plist-put org-format-latex-options :scale 1.5))     ;调整 LaTeX 预览图片的大小
+;;          (plist-put org-format-latex-options :scale 2.0))     ;调整 LaTeX 预览图片的大小
 ;;    #+END_EXAMPLE
 
 ;; ** 常见错误排查和解决
