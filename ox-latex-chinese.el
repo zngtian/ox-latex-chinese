@@ -122,10 +122,12 @@
 ;; 2. 安装 [[http://www.imagemagick.org/][imagemagick]] 和 [[http://ghostscript.com/][ghostscript]]
 ;; 3. 设置 emacs
 ;;    #+BEGIN_EXAMPLE
-;;    ;; (setq org-latex-create-formula-image-program 'dvipng)   ;速度很快，但 *默认* 不支持中文
-;;    (setq org-latex-create-formula-image-program 'imagemagick) ;速度较慢，但支持中文
+;;    ;; (setq org-latex-create-formula-image-program 'dvipng)    ;速度很快，但 *默认* 不支持中文
+;;    (setq org-latex-create-formula-image-program 'imagemagick)  ;速度较慢，但支持中文
 ;;    (setq org-format-latex-options
-;;          (plist-put org-format-latex-options :scale 2.0))     ;调整 LaTeX 预览图片的大小
+;;          (plist-put org-format-latex-options :scale 2.0))      ;调整 LaTeX 预览图片的大小
+;;    (setq org-format-latex-options
+;;          (plist-put org-format-latex-options :html-scale 2.5)) ;调整 HTML 文件中 LaTeX 图像的大小
 ;;    #+END_EXAMPLE
 
 ;; ** 常见错误排查和解决
