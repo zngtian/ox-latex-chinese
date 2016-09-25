@@ -212,15 +212,19 @@ to latex."
   :group 'org-export-latex-chinese)
 
 (defcustom oxlc/org-latex-commands
-  '(("default"
-     :pdf ("xelatex -interaction nonstopmode -output-directory %o %f"
-           "bibtex %b"
-           "xelatex -interaction nonstopmode -output-directory %o %f"
-           "xelatex -interaction nonstopmode -output-directory %o %f"))
-    ("fragment"
-     :pdf ("xelatex -interaction nonstopmode -output-directory %o %f")
-     :xdv ("xelatex -no-pdf -interaction nonstopmode -output-directory %o %f")))
+  '("xelatex -interaction nonstopmode -output-directory %o %f"
+    "bibtex %b"
+    "xelatex -interaction nonstopmode -output-directory %o %f"
+    "xelatex -interaction nonstopmode -output-directory %o %f")
   "Set latex commands which will be used by `oxlc/org-latex-compile'."
+  :group 'org-export-latex-chinese)
+
+(defcustom oxlc/org-latex-preview-commands
+  '("xelatex -interaction nonstopmode -output-directory %o %f")
+  "Set latex commands used for preview latex snippet, which will be
+used by `oxlc/org-latex-compile'.
+
+Note: this option *only* useful for org-mode (version < 9.0 )."
   :group 'org-export-latex-chinese)
 
 (defcustom oxlc/org-latex-default-class "ctexart"
@@ -377,8 +381,8 @@ to latex."
   (if oxlc/ox-latex-chinese-enable
       (let ((org-latex-pdf-process
              (if snippet
-                 (plist-get (cdr (assoc "fragment" oxlc/org-latex-commands)) :pdf)
-               (plist-get (cdr (assoc "default" oxlc/org-latex-commands)) :pdf))))
+                 oxlc/org-latex-preview-commands
+               oxlc/org-latex-commands)))
         (funcall orig-fun texfile snippet))
     (funcall orig-fun texfile snippet)))
 
