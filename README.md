@@ -13,9 +13,9 @@
   - [常见错误排查和解决](#常见错误排查和解决)
     - [缺少必要的 Latex 宏包](#缺少必要的-latex-宏包)
 
-# README<a id="orge59e551"></a>
+# README<a id="orgheadline18"></a>
 
-## 简介<a id="orgfa3db22"></a>
+## 简介<a id="orgheadline1"></a>
 
 ox-latex-chinese 是一个 org-mode 工具，它可以帮助 org-mode 中文用户简单快速的配置 "org->latex->pdf" 工作环境。
 
@@ -32,9 +32,9 @@ ox-latex-chinese 是一个 org-mode 工具，它可以帮助 org-mode 中文用�
 
 ![img](./snapshots/ox-latex-chinese.gif)
 
-## 下载并安装 Texlive<a id="orgc53f7ee"></a>
+## 下载并安装 Texlive<a id="orgheadline9"></a>
 
-### 下载 Tex Live ISO 镜像<a id="org48e2c0e"></a>
+### 下载 Tex Live ISO 镜像<a id="orgheadline2"></a>
 
 TeX Live 支持 Linux，Windows 以及 MacOX 多种操作系统，安装方式多种多样，由于我这里网络不太稳定，所以我选择通过 Tex Live ISO 来安装 Tex Live （文件大小大约3G），
 
@@ -44,12 +44,12 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 1.  中国科学技术大学镜像：<http://mirrors.ustc.edu.cn/CTAN/systems/texlive/Images/>
 2.  清华大学镜像：<http://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/Images/>
 
-### 挂载已经下载的 ISO 镜像<a id="org7523c96"></a>
+### 挂载已经下载的 ISO 镜像<a id="orgheadline3"></a>
 
 1.  下载安装 [wincdemu](http://wincdemu.sysprogs.org/), winmount 或者 DAEMON Tools，这类工具可以将 ISO 文件挂载到一个盘符，比直接解压缩快速方便。
 2.  将 ISO 镜像挂载到 “Z:\\”
 
-### 运行安装程序<a id="org41937e3"></a>
+### 运行安装程序<a id="orgheadline4"></a>
 
 1.  打开 “Z” 盘。
 2.  **完全安装** 请运行 “install-tl.bat”，这种方式比较省心，但很占空间。
@@ -57,13 +57,13 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 
 注：安装的时候建议关闭杀毒软件。
 
-### 设置安装参数<a id="orgcd4a5b1"></a>
+### 设置安装参数<a id="orgheadline5"></a>
 
 运行安装程序后，会弹出一个窗口（比较丑陋）用于设置安装选项，在 “选择安装方案” 选项中选择 “scheme-small”，其它选项不变，然后开始安装（安装大概需要 5 分钟左右）。
 
 ![img](./snapshots/advanced-install.gif)
 
-### 安装所需要的 Latex 宏包<a id="orgcc65505"></a>
+### 安装所需要的 Latex 宏包<a id="orgheadline8"></a>
 
 1.  第一种方式：使用 Tex Live 管理器图形界面安装
 
@@ -71,7 +71,7 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
 
     1.  运行 Tex Live 管理器： 开始 >程序 > Tex Live 2015 > Tex Live Manager
     2.  载入本地宏包仓库：tlmgr >载入其它仓库，在弹出的对话框中选择 “choose local directory”，载入本地仓库 “Z:”。
-    3.  安装所需宏包： collection-langcjk, collection-langchinese, ctex, ctex-faq, bibtex8, environ, trimspaces, zhnumber, wrapfig, capt-of, latexmk, dvipng
+    3.  安装所需宏包： collection-langcjk, collection-langchinese, ctex, ctex-faq, bibtex8, environ, trimspaces, zhnumber, wrapfig, capt-of, latexmk, dvipng, dvisvgm
 
 2.  第二种方式：使用 tlmge 命令安装
 
@@ -84,21 +84,21 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
             tlmgr update -all
     4.  安装所需宏包
 
-            tlmgr install collection-langcjk collection-langchinese ctex ctex-faq bibtex8 environ trimspaces zhnumber wrapfig capt-of latexmk dvipng
+            tlmgr install collection-langcjk collection-langchinese ctex ctex-faq bibtex8 environ trimspaces zhnumber wrapfig capt-of latexmk dvipng dvisvgm
 
-## 安装并配置 ox-latex-chinese<a id="org78de1b7"></a>
+## 安装并配置 ox-latex-chinese<a id="orgheadline12"></a>
 
-### 安装<a id="org6eecc3c"></a>
+### 安装<a id="orgheadline10"></a>
 
 1.  配置 melpa: <http://melpa.org/#/getting-started>
 2.  M-x package-install RET ox-latex-chinese RET
 
-### 配置<a id="org6565a70"></a>
+### 配置<a id="orgheadline11"></a>
 
     (require 'ox-latex-chinese)
     (oxlc/toggle-ox-latex-chinese t)
 
-## 设置 LaTeX 片断预览功能<a id="orgbcd84e4"></a>
+## 设置 LaTeX 片断预览功能<a id="orgheadline13"></a>
 
 1.  确保 emacs 可以显示 png 文件，具体参考：<ftp://ftp.gnu.org/gnu/emacs/windows/README>
 2.  安装 [imagemagick](http://www.imagemagick.org/) 和 [ghostscript](http://ghostscript.com/)
@@ -111,9 +111,9 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
         (setq org-format-latex-options
               (plist-put org-format-latex-options :html-scale 2.5)) ;调整 HTML 文件中 LaTeX 图像的大小
 
-## 常见错误排查和解决<a id="orga1c5489"></a>
+## 常见错误排查和解决<a id="orgheadline17"></a>
 
-### 缺少必要的 Latex 宏包<a id="org2c8fc4a"></a>
+### 缺少必要的 Latex 宏包<a id="orgheadline16"></a>
 
 1.  表现形式
 
