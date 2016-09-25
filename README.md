@@ -11,9 +11,10 @@
     - [配置](#配置)
   - [设置 LaTeX 片断预览功能](#设置-latex-片断预览功能)
   - [常见错误排查和解决](#常见错误排查和解决)
+    - [中文目录下的 org 文件无法转换为 pdf 文件](#中文目录下的-org-文件无法转换为-pdf-文件)
     - [缺少必要的 Latex 宏包](#缺少必要的-latex-宏包)
 
-# README<a id="orgheadline18"></a>
+# README<a id="orgheadline19"></a>
 
 ## 简介<a id="orgheadline1"></a>
 
@@ -111,9 +112,15 @@ Tex Live 主站访问速度很慢，建议同学们使用国内镜像，许多 L
         (setq org-format-latex-options
               (plist-put org-format-latex-options :html-scale 2.5)) ;调整 HTML 文件中 LaTeX 图像的大小
 
-## 常见错误排查和解决<a id="orgheadline17"></a>
+## 常见错误排查和解决<a id="orgheadline18"></a>
 
-### 缺少必要的 Latex 宏包<a id="orgheadline16"></a>
+### 中文目录下的 org 文件无法转换为 pdf 文件<a id="orgheadline14"></a>
+
+这个问题可以使用 latexmk 命令配合 "%b.tex" (仅仅使用文件名，而不是文件的绝对路径) 来规避，比如：
+
+    (setq oxlc/org-latex-commands '("latexmk -xelatex -g -pdf %b.tex"))
+
+### 缺少必要的 Latex 宏包<a id="orgheadline17"></a>
 
 1.  表现形式
 
