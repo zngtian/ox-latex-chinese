@@ -385,12 +385,22 @@ to latex."
   (let* ((fonts-list (cdr (assoc fontclass oxlc/org-latex-fonts)))
          (font (car (cl-remove-if
                      #'(lambda (fontname)
-                         (not (x-list-fonts fontname)))
+                         (not (oxlc/font-available-p fontname)))
                      fonts-list))))
     (unless font
       (message (format "org-latex-chinese: Emacs can't find an available (%s) font for latex, ignore!"
                        (symbol-name fontclass))))
     font))
+
+(defun oxlc/font-available-p (fontname)
+  (mapcar #'(lambda (x)
+              (substring-no-properties x))
+          (delq nil (mapcar
+                     #'(lambda (x)
+                         (when (or (string= fontname x)
+                                   (string= (string-as-unibyte fontname) x))
+                           fontname))
+                     (font-family-list)))))
 
 (defmacro oxlc/if (cond expression1 expression2)
   (declare (indent 1))
