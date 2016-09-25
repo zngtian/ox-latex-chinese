@@ -1,7 +1,7 @@
 ;;; ox-latex-chinese.el --- An example org latex exporter configure for Chinese users
 
 ;; * Header
-;; Copyright (c) 2015, Feng Shu
+;; Copyright (c) 2016, Feng Shu
 
 ;; Author: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/ox-latex-chinese
